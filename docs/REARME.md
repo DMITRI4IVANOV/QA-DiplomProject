@@ -7,7 +7,7 @@
 
 [Дипломное задание](https://github.com/netology-code/qa-diploma)
 
-[План автоматизации тестирования веб-формы сервиса покупки туров ](docs/Plan.md)
+[План автоматизации тестирования веб-формы сервиса покупки туров ](https://github.com/DMITRI4IVANOV/QA-DiplomProject/blob/main/docs/REARME.md)
 
 ## Запуск приложения
 
