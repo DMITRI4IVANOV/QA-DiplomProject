@@ -2,21 +2,19 @@ package test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import data.DBHelper;
+import org.junit.jupiter.api.*;
 import data.DataHelper;
-import page.MainPage;
-import page.PaymentPage;
+import data.DBHelper;
+import page.PageMain;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PaymentTest {
+public class PaymentTest{
+    PageMain pageMain = new PageMain();
+
     @BeforeEach
-    void openPage() {
+    void openForTests() {
         open("http://localhost:8080");
     }
 
@@ -30,223 +28,131 @@ public class PaymentTest {
         SelenideLogger.removeListener("allure");
     }
 
-    @AfterAll
-    static void clearTables() {
-        DBHelper.clearTables();
+    @Test
+    @DisplayName("Тест загрузки вкладки Купить")
+    void shouldCheckTheDownloadOfThePaymentByCard() {
+        pageMain.payByDebitCard();
     }
 
     @Test
-    void test3_shouldFillPaymentFormCard1() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var paymentPage = new PaymentPage();
-        var authInfo = DataHelper.getAuthInfoAllValidApproved();
-        paymentPage.fillPaymentForm(authInfo);
-        paymentPage.checkOperationIsSuccessful();
-        assertEquals("APPROVED", DBHelper.getStatusPayment());
+    @DisplayName("Тест с APPROVED картой и валидными данными")
+    void shouldCheckWithAnApprovedCardAndValidData() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getApprovedCardInfo();
+        payForm.fillingForm(approvedInfo);
+        payForm.checkOperationIsApproved();
+        String dataSQLPayment = DBHelper.getPaymentStatus();
+        assertEquals("APPROVED", dataSQLPayment);
     }
 
     @Test
-    void test4_shouldFillPaymentFormCard2() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var paymentPage = new PaymentPage();
-        var authInfo = DataHelper.getAuthInfoAllValidDeclined();
-        paymentPage.fillPaymentForm(authInfo);
-        paymentPage.checkOperationIsNotSuccessful();
-        assertEquals("DECLINED", DBHelper.getStatusPayment());
+    @DisplayName("Тест с валидными данными")
+    void shouldBeCheckedWithValidData() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getApprovedCardInfo();
+        payForm.fillingForm(approvedInfo);
+        payForm.checkOperationIsApproved();
+        String dataSQLPayAmount = DBHelper.getPaymentAmount();
+        assertEquals("45000", dataSQLPayAmount);
     }
 
     @Test
-    void test5_shouldNotFillPaymentForm() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var paymentPage = new PaymentPage();
-        var authInfo = DataHelper.getAuthInfoNoData();
-        paymentPage.fillPaymentForm(authInfo);
-        paymentPage.cardNumberError();
-        paymentPage.cardMonthError();
-        paymentPage.cardYearError();
-        paymentPage.cardHolderError();
-        paymentPage.cardCVCError();
+    @DisplayName("Тест DECLINED карты с валидными данными")
+    void shouldCheckTheDeclinedCardAndTheValidData() {
+        var payForm = pageMain.payByDebitCard();
+        var declinedInfo = DataHelper.getDeclinedCardInfo();
+        payForm.fillingForm(declinedInfo);
+        payForm.checkErrorNotification();
+        String dataSQLPayment = DBHelper.getPaymentStatus();
+        assertEquals("DECLINED", dataSQLPayment);
     }
 
     @Test
-    void test6_shouldFillPaymentFormNotValidCardNumber() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumberNotValid();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.checkOperationIsNotSuccessful();
+    @DisplayName("Тест невалидной карты")
+    void shouldheckTheInvalidCard() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidCardNumber = DataHelper.getInvalidCardNumberInfo();
+        payForm.fillingForm(invalidCardNumber);
+        payForm.checkErrorNotification();
     }
 
     @Test
-    void test7_shouldFillPaymentFormNotValidCardNumber15() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumberNotValid15();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardNumberError();
+    @DisplayName("Тест невалидного месяца")
+    void shouldCheckTheInvalidMonth() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidMonth = DataHelper.getInvalidMonthInfo();
+        payForm.fillFormNoSendRequest(invalidMonth);
+        payForm.checkInvalidExpirationDate();
     }
 
     @Test
-    void test8_shouldFillPaymentFormNotValidCardNumber17() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumberNotValid17();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.checkOperationIsNotSuccessful();
+    @DisplayName("Тест невалидного месяца")
+    void shouldCheckTheInvalidMonthZero() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidMonth = DataHelper.getInvalidMonthZeroInfo();
+        payForm.fillFormNoSendRequest(invalidMonth);
+        payForm.checkInvalidExpirationDate();
     }
 
     @Test
-    void test9_shouldNotBeHiddenNotificationOnPagePayment() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumberNotValid();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.checkOperationIsNotSuccessful();
-        paymentPage.checkOperationIsSuccessful();
+    @DisplayName("Тест с истекшим сроком действия карты")
+    void shouldBeCheckedWithAnExpiredExpirationDate() {
+        var payForm = pageMain.payByDebitCard();
+        var expiredYear = DataHelper.getExpiredYearInfo();
+        payForm.fillFormNoSendRequest(expiredYear);
+        payForm.checkCardExpired();
     }
 
     @Test
-    void test10_shouldFillPaymentFormNotValidFormatCardMonth() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonthNotValidFormat();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardMonthError();
+    @DisplayName("Тест с неверно указаным сроком действия карты")
+    void shouldCheckWithTheIncorrectlySpecifiedCardExpirationDate() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidYear = DataHelper.getInvalidYearInfo();
+        payForm.fillFormNoSendRequest(invalidYear);
+        payForm.checkInvalidExpirationDate();
     }
 
     @Test
-    void test11_shouldFillPaymentFormNotValidCardMonth() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonthNotValid();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardMonthError2();
+    @DisplayName("Тест данные владельца карты на киррилице")
+    void shouldCheckTheOwnersDataInCyrillic() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidOwner = DataHelper.getInvalidOwnerInfo();
+        payForm.fillFormNoSendRequest(invalidOwner);
+        payForm.checkWrongFormat();
     }
 
     @Test
-    void test12_shouldFillPaymentFormNotValidCardYear() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardYearNotValid1();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardYearError2();
+    @DisplayName("Тест отправка пустой формы")
+    void shouldSendAnEmptyForm() {
+        var payForm = pageMain.payByDebitCard();
+        var emptyFields = DataHelper.getEmptyFields();
+        payForm.fillFormNoSendRequest(emptyFields);
+        payForm.checkWrongFormat();
+        payForm.checkRequiredField();
     }
 
     @Test
-    void test13_shouldFillPaymentFormPreviousMonthCurrentYear() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var paymentPage = new PaymentPage();
-        var authInfo = DataHelper.getAuthInfoMonthYear();
-        paymentPage.fillPaymentForm(authInfo);
-        paymentPage.cardMonthError2();
+    @DisplayName("Тест отправить сперва пустую форму заявки, затем заполнить валидными данными и отправить повторно")
+    void shouldSendTheFormEmptyAndThenWithTheOwnersData() {
+        var payForm = pageMain.payByDebitCard();
+        var emptyFields = DataHelper.getEmptyFields();
+        var approvedInfo = DataHelper.getApprovedCardInfo();
+        payForm.fillFormNoSendRequest(emptyFields);
+        payForm.checkWrongFormat();
+        payForm.checkRequiredField();
+        payForm.fillingForm(approvedInfo);
+        payForm.checkOperationIsApproved();
     }
 
     @Test
-    void test14_shouldFillPaymentFormNotValidCardYear2() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardYearNotValid2();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardYearError3();
-    }
-
-    @Test
-    void test15_shouldFillPaymentFormNotValidCyrillicCardHolder() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolderNotValidCyrillic();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardHolderError2();
-    }
-
-    @Test
-    void test16_shouldFillPaymentFormNotValidLatinCardHolder() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolderNotValidLatin();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardHolderError2();
-    }
-
-    @Test
-    void test17_shouldFillPaymentFormNotValidNumbersCardHolder() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolderNotValidNumbers();
-        var cardCVC =DataHelper.getCardCVC();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardHolderError2();
-    }
-
-    @Test
-    void test18_shouldFillPaymentFormNotValidCardCVC() {
-        var mainPage = new MainPage();
-        mainPage.buyPayment();
-        var cardNumber = DataHelper.getCardNumber1();
-        var cardMonth =DataHelper.getCardMonth();
-        var cardYear =DataHelper.getCardNextYear();
-        var cardHolder =DataHelper.getCardHolder();
-        var cardCVC =DataHelper.getCardCVCNotValid();
-        var paymentPage = new PaymentPage();
-        paymentPage.differentValuesPayment(cardNumber, cardMonth, cardYear,cardHolder, cardCVC);
-        paymentPage.cardCVCError();
+    @DisplayName("Тест с невалидными данными всех полей")
+    void shouldBeCheckedWithInvalidDataOfAllFields() {
+        var payForm = pageMain.payByDebitCard();
+        var invalidValue = DataHelper.getInvalidCardForm();
+        payForm.fillFormNoSendRequest(invalidValue);
+        payForm.checkInvalidMonthT();
+        payForm.checkInvalidYearT();
+        payForm.checkInvalidOwnerT();
+        payForm.checkInvalidCVVT();
     }
 }

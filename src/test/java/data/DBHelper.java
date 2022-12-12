@@ -1,63 +1,64 @@
 package data;
-import lombok.val;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import models.CreditRequest;
+import models.PaymentRequest;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static java.sql.DriverManager.getConnection;
-
 public class DBHelper {
-    private static final String dbUrl = System.getProperty("db.url");
-    private static final String dbUser = System.getProperty("db.user");
-    private static final String dbPassword = System.getProperty("db.password");
+    private static final String URL = System.getProperty("db.url");
+    private static final String USERNAME = System.getProperty("db.username");
+    private static final String PASSWORD = System.getProperty("db.password");
+    private static Connection connect;
 
-    private DBHelper() {
+    private static Connection getConnection() {
+        try {
+            connect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return connect;
     }
 
-    public static String getStatusPayment() {
-        val statusBD = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
-        val runner = new QueryRunner();
+    public static String getPaymentStatus() {
+        var runner = new QueryRunner();
+        var payStatus = "SELECT status FROM payment_entity";
 
-        try (
-                val conn = getConnection(dbUrl, dbUser, dbPassword);
-        ) {
-            return runner.query(conn, statusBD, new ScalarHandler<String>());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try (var connect = getConnection()) {
+            var paymentStatus = runner.query(connect, payStatus, new BeanHandler<>(PaymentRequest.class));
+            return paymentStatus.getStatus();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
         return null;
     }
 
-    public static String getStatusCredit() {
-        val statusBD = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
-        val runner = new QueryRunner();
+    public static String getPaymentAmount() {
+        var runner = new QueryRunner();
+        var payAmount = "SELECT amount FROM payment_entity";
 
-        try (
-                val conn = getConnection(dbUrl, dbUser, dbPassword);
-        ) {
-            return runner.query(conn, statusBD, new ScalarHandler<String>());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try (var connect = getConnection()) {
+            var paymentAmount = runner.query(connect, payAmount, new BeanHandler<>(PaymentRequest.class));
+            return paymentAmount.getAmount();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
         return null;
     }
 
-    public static void clearTables() {
-        val deletePayment = "DELETE FROM payment_entity;";
-        val deleteCredit = "DELETE FROM credit_request_entity;";
-        val deleteOrder = "DELETE FROM order_entity;";
-        val runner = new QueryRunner();
+    public static String getCreditStatus() {
+        var runner = new QueryRunner();
+        var cStatus = "SELECT status FROM credit_request_entity";
 
-        try (
-                val conn = getConnection(dbUrl, dbUser, dbPassword);
-        ) {
-            runner.update(conn, deletePayment);
-            runner.update(conn, deleteCredit);
-            runner.update(conn, deleteOrder);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try (var connect = getConnection()) {
+            var creditStatus = runner.query(connect, cStatus, new BeanHandler<>(CreditRequest.class));
+            return creditStatus.getStatus();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
+        return null;
     }
 }

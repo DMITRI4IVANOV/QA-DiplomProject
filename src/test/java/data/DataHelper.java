@@ -6,116 +6,144 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+
 public class DataHelper {
-    private DataHelper() {
+
+    public static String getApprovedCardNumber() {
+        return "4444 4444 4444 4441";
     }
 
-    private static Faker fakerEn = new Faker(new Locale("en"));
-    private static Faker fakerRu = new Faker(new Locale("ru"));
-
-    @Value
-    public static class AuthInfo {
-        private String cardNumber;
-        private String cardMonth;
-        private String cardYear;
-        private String cardHolder;
-        private String cardCVC;
+    public static String getDeclinedCardNumber() {
+        return "4444 4444 4444 4442";
     }
 
-    public static AuthInfo getAuthInfoAllValidApproved() {
-        return new AuthInfo(getCardNumber1(), getCardMonth(), getCardNextYear(), getCardHolder(), getCardCVC());
+    public static String getInvalidCardNumber() {
+        return "0000 0000 0000  0001";
     }
 
-    public static AuthInfo getAuthInfoAllValidDeclined() {
-        return new AuthInfo(getCardNumber2(), getCardMonth(), getCardNextYear(), getCardHolder(), getCardCVC());
+    public static String getEmptyCardNumbervalue() {
+        return " ";
     }
 
-    public static AuthInfo getAuthInfoNoData() {
-        return new AuthInfo("", "", "", "", "");
+    public static String getvalidMonth() {
+        return "08";
     }
 
-    public static AuthInfo getAuthInfoMonthYear() {
-        return new AuthInfo(getCardNumber1(), getCardPreviousMonth(), getCardCurrentYear(), getCardHolder(), getCardCVC());
+    public static String getInvalidMonth() {
+        return "99";
     }
 
-    public static String getCardNumber1() {
-        return "4444444444444441";
-    }
-
-    public static String getCardNumber2() {
-        return "4444444444444442";
-    }
-
-    public static String getCardNumberNotValid() {
-        return "1234567812345678";
-    }
-
-    public static String getCardNumberNotValid15() {
-        return "555555555555555";
-    }
-
-    public static String getCardNumberNotValid17() {
-        return "77777777777777777";
-    }
-
-    public static String getCardMonth() {
-        return "05";
-    }
-
-    public static String getCardMonthNotValidFormat() {
-        return "5";
-    }
-
-    public static String getCardMonthNotValid() {
-        return "55";
-    }
-
-    public static String getCardPreviousMonth() {
-        int currentMonth = LocalDate.now().getMonthValue();
-        if (currentMonth == 1) {
-            return "12";
-        } else {
-            return LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
-        }
-    }
-
-    public static String getCardYearNotValid1() {
+    public static String getInvalidMonthZero() {
         return "00";
     }
 
-    public static String getCardYearNotValid2() {
-        return "88";
+    public static String getEmptyMonthvalue() {
+        return " ";
     }
 
-    public static String getCardCurrentYear() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yy"));
+    public static String getvalidYear() {
+        LocalDate year = LocalDate.now();
+        LocalDate newYear = year.plusYears(1);
+        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yy");
+        return newYear.format(yearFormatter);
     }
 
-    public static String getCardNextYear() {
-        return LocalDate.now().plusYears(1).format(DateTimeFormatter.ofPattern("yy"));
+    public static String getExpiredYear() {
+        LocalDate year = LocalDate.now();
+        LocalDate newYear = year.minusYears(11);
+        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yy");
+        return newYear.format(yearFormatter);
     }
 
-    public static String getCardHolder() {
-        return fakerEn.name().firstName() + " " + fakerEn.name().lastName();
+    public static String getInvalidYear() {
+        LocalDate year = LocalDate.now();
+        LocalDate newYear = year.plusYears(78);
+        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yy");
+        return newYear.format(yearFormatter);
     }
 
-    public static String getCardHolderNotValidCyrillic() {
-        return fakerRu.name().firstName() + " " + fakerRu.name().lastName();
+    public static String getEmptyYearvalue() {
+        return " ";
     }
 
-    public static String getCardHolderNotValidLatin() {
-        return "yjhfwkg";
+    public static String getvalidOwner() {
+        Faker faker = new Faker(new Locale("en"));
+        return faker.name().fullName();
     }
 
-    public static String getCardHolderNotValidNumbers() {
-        return "1354/.123][/";
+    public static String getInvalidOwner() {
+        Faker faker = new Faker(new Locale("ru"));
+        return faker.name().fullName();
     }
 
-    public static String getCardCVC() {
+    public static String getEmptyOwnervalue() {
+        return " ";
+    }
+
+    public static String getvalidCVV() {
         return "123";
     }
 
-    public static String getCardCVCNotValid() {
+    public static String getInvalidCVV() {
         return "12";
+    }
+
+    public static String getEmptyCVVvalue() {
+        return " ";
+    }
+
+    public static CardInfo getApprovedCardInfo() {
+        return new CardInfo(getApprovedCardNumber(), getvalidMonth(), getvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getDeclinedCardInfo() {
+        return new CardInfo(getDeclinedCardNumber(), getvalidMonth(), getvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getInvalidCardNumberInfo() {
+        return new CardInfo(getInvalidCardNumber(), getvalidMonth(), getvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getInvalidMonthInfo() {
+        return new CardInfo(getApprovedCardNumber(), getInvalidMonth(), getvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getInvalidMonthZeroInfo() {
+        return new CardInfo(getApprovedCardNumber(), getInvalidMonthZero(), getvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getExpiredYearInfo() {
+        return new CardInfo(getApprovedCardNumber(), getvalidMonth(), getExpiredYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getInvalidYearInfo() {
+        return new CardInfo(getApprovedCardNumber(), getvalidMonth(), getInvalidYear(), getvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getInvalidOwnerInfo() {
+        return new CardInfo(getApprovedCardNumber(), getvalidMonth(), getvalidYear(), getInvalidOwner(), getvalidCVV());
+    }
+
+    public static CardInfo getEmptyFields() {
+        return new CardInfo(getEmptyCardNumbervalue(), getEmptyMonthvalue(), getEmptyYearvalue(),
+                getEmptyOwnervalue(), getEmptyCVVvalue());
+    }
+
+    public static CardInfo getInvalidvaluesOfForm() {
+        return new CardInfo(getInvalidCardNumber(), getInvalidMonth(), getInvalidYear(),
+                getInvalidOwner(), getInvalidCVV());
+    }
+
+    public static CardInfo getInvalidCardForm() {
+        return new CardInfo(getInvalidCardNumber(), getInvalidMonth(), getInvalidYear(), getInvalidOwner(), getInvalidCVV());
+    }
+
+    @Value
+    public static class CardInfo {
+        String cardNumber;
+        String month;
+        String year;
+        String owner;
+        String cvv;
     }
 }
