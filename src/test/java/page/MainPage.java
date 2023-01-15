@@ -25,8 +25,6 @@ public class MainPage {
         return new CreditPage();
     }
 
-//    public void sheetPayment() {
-//    }
 
 //    public void sheetPayment() {
 //        sheetFieldPayment.shouldBe(Condition.visible);
