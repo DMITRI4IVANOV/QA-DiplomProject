@@ -9,11 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static java.time.Duration.ofSeconds;
 
 public class CreditPage {
-    private SelenideElement sheetFieldCredit = $(byText("Кредит по данным карты"));
-    public void sheetCredit() {
-        sheetFieldCredit.shouldBe(Condition.visible);
-    }
-    
+
     private SelenideElement cardNumberField = $(byText("Номер карты")).parent().$(".input__control");
     private SelenideElement cardMonthField = $(byText("Месяц")).parent().$(".input__control");
     private SelenideElement cardYearField = $(byText("Год")).parent().$(".input__control");
@@ -94,7 +90,5 @@ public class CreditPage {
         declinedAnswer.shouldBe(Condition.visible,ofSeconds(15));
     }
 
-    public void buyCredit() {
-        sheetFieldCredit.shouldBe(Condition.visible);
-    }
+
 }

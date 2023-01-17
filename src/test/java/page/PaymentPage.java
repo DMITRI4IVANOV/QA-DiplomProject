@@ -9,10 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static java.time.Duration.ofSeconds;
 
 public class PaymentPage {
-    private SelenideElement sheetFieldPayment = $(byText("Оплата по карте"));
-    public void sheetPayment() {
-        sheetFieldPayment.shouldBe(Condition.visible);
-    }
+
     private SelenideElement cardNumberField = $(byText("Номер карты")).parent().$(".input__control");
     private SelenideElement cardMonthField = $(byText("Месяц")).parent().$(".input__control");
     private SelenideElement cardYearField = $(byText("Год")).parent().$(".input__control");
@@ -92,10 +89,6 @@ public class PaymentPage {
 
     public void checkOperationIsNotSuccessful() {
         declinedAnswer.shouldBe(Condition.visible,ofSeconds(15));
-    }
-//
-    public void buyPayment() {
-        sheetFieldPayment.shouldBe(Condition.visible);
     }
 
 

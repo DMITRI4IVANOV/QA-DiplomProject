@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class MainTest {
     @BeforeEach
     void openPage() {
-        open("http://localhost:8080");
+        open("http://localhost:8080/");
     }
 
     @BeforeAll
@@ -32,15 +32,15 @@ public class MainTest {
 
     @Test
     void test1_shouldOpenPagePayment() {
-        var paymentPage = new PaymentPage();
-        paymentPage.buyPayment();
-        paymentPage.sheetPayment();
+        var mainPage = new MainPage();
+        mainPage.buyPayment();
+        mainPage.sheetPayment();
     }
 
     @Test
     void test2_shouldOpenPageCredit() {
-        var creditPage = new CreditPage();
-        creditPage.buyCredit();
-        creditPage.sheetCredit();
+        var mainPage = new MainPage();
+        mainPage.buyCredit();
+        mainPage.sheetCredit();
     }
 }

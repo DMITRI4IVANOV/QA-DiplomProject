@@ -11,9 +11,9 @@ public class MainPage {
     public SelenideElement buttonPayment = $(byText("Купить"));
     public SelenideElement buttonCredit = $(byText("Купить в кредит"));
 
-//    private SelenideElement sheetFieldPayment = $(byText("Оплата по карте"));
+    private SelenideElement sheetFieldPayment = $(byText("Оплата по карте"));
 
-//    private SelenideElement sheetFieldCredit = $(byText("Кредит по данным карты"));
+    private SelenideElement sheetFieldCredit = $(byText("Кредит по данным карты"));
 
     public PaymentPage buyPayment() {
         buttonPayment.click();
@@ -26,11 +26,11 @@ public class MainPage {
     }
 
 
-//    public void sheetPayment() {
-//        sheetFieldPayment.shouldBe(Condition.visible);
-//    }
-//
-//    public void sheetCredit() {
-//        sheetFieldCredit.shouldBe(Condition.visible);
-//    }
+    public void sheetPayment() {
+        sheetFieldPayment.shouldBe(Condition.visible);
+    }
+
+    public void sheetCredit() {
+        sheetFieldCredit.shouldBe(Condition.visible);
+    }
 }
