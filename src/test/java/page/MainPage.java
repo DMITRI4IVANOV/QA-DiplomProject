@@ -10,10 +10,8 @@ import static com.codeborne.selenide.Selenide.$;
 public class MainPage {
     public SelenideElement buttonPayment = $(byText("Купить"));
     public SelenideElement buttonCredit = $(byText("Купить в кредит"));
-
-    private SelenideElement sheetFieldPayment = $(byText("Оплата по карте"));
-
-    private SelenideElement sheetFieldCredit = $(byText("Кредит по данным карты"));
+    public SelenideElement sheetFieldPayment = $(byText("Оплата по карте"));
+    public SelenideElement sheetFieldCredit = $(byText("Кредит по данным карты"));
 
     public PaymentPage buyPayment() {
         buttonPayment.click();

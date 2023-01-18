@@ -9,15 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import data.DBHelper;
 import page.MainPage;
-import page.CreditPage;
-import page.PaymentPage;
+
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class MainTest {
     @BeforeEach
     void openPage() {
-        open("http://localhost:8080/");
+        open("http://localhost:8080");
     }
 
     @BeforeAll

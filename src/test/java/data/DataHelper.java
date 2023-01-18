@@ -71,14 +71,6 @@ public class DataHelper {
         return "55";
     }
 
-    //    public static String getCardPreviousMonth() {
-//        int currentMonth = LocalDate.now().getMonthValue();
-//        if (currentMonth == 1) {
-//            return "12";
-//        } else {
-//            return LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
-//        }
-//    }
     public static String getCardPreviousMonth() {
         LocalDate ld1 = LocalDate.now();
         System.out.println("The LocalDate is: " + ld1);
