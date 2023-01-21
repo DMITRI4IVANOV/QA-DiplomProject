@@ -39,7 +39,6 @@ public class CreditTest {
     @Test
     void test19_shouldFillCreditFormCard1() {
         var mainPage = new MainPage();
-//        mainPage.buyCredit();
         var creditPage = mainPage.buyCredit();
         var authInfo = DataHelper.getAuthInfoAllValidApproved();
         creditPage.fillPaymentForm(authInfo);
@@ -50,7 +49,6 @@ public class CreditTest {
     @Test
     void test20_shouldFillCreditFormCard2() {
         var mainPage = new MainPage();
-//        mainPage.buyCredit();
         var creditPage = mainPage.buyCredit();
         var authInfo = DataHelper.getAuthInfoAllValidDeclined();
         creditPage.fillPaymentForm(authInfo);
@@ -61,7 +59,6 @@ public class CreditTest {
     @Test
     void test21_shouldNotFillCreditForm() {
         var mainPage = new MainPage();
-//        mainPage.buyCredit();
         var creditPage = mainPage.buyCredit();
         var authInfo = DataHelper.getAuthInfoNoData();
         creditPage.fillPaymentForm(authInfo);
@@ -174,7 +171,6 @@ public class CreditTest {
     @Test
     void test29_shouldFillCreditFormPreviousMonthCurrentYear() {
         var mainPage = new MainPage();
-//        mainPage.buyCredit();
         var creditPage = mainPage.buyCredit();
         var authInfo = DataHelper.getAuthInfoMonthYear();
         creditPage.fillPaymentForm(authInfo);

@@ -14,11 +14,10 @@
 * Успешные тесты - 22
 * Неуспешные тесты - 12
 * Количество баг-репортов - 11
-
-  (https://disk.yandex.ru/d/niTGyYZ8MDCQUQ)
-  (https://disk.yandex.ru/d/k5BF_bDicHE30Q)
-  (https://disk.yandex.ru/d/t23vOfHEsz5_yw)
-  (https://disk.yandex.ru/d/20aqs8ST-XlY7g)
+![](../../../../Downloads/2023-01-18_20-26-04.png)
+![](../../../../Downloads/2023-01-18_20-28-08.png)
+![](../../../../Downloads/2023-01-18_20-27-45.png)
+![](../../../../Downloads/2023-01-18_20-26-50.png)
 
 ## 4. Общие рекомендации
 * Создать документацию
