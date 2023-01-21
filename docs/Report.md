@@ -14,10 +14,11 @@
 * Успешные тесты - 22
 * Неуспешные тесты - 12
 * Количество баг-репортов - 11
-![](../../../../Downloads/2023-01-18_20-26-04.png)
-![](../../../../Downloads/2023-01-18_20-28-08.png)
-![](../../../../Downloads/2023-01-18_20-27-45.png)
-![](../../../../Downloads/2023-01-18_20-26-50.png)
+![2023-01-18_20-28-08](https://user-images.githubusercontent.com/100711204/213854869-ade0bafb-04eb-4c0d-a7cf-6f3c2f407434.png)
+![2023-01-18_20-27-45](https://user-images.githubusercontent.com/100711204/213854872-edeb2842-fe75-48b2-ad4f-a98e17c81378.png)
+![2023-01-18_20-26-50](https://user-images.githubusercontent.com/100711204/213854876-ee287449-60c9-4172-a711-adac8773c20d.png)
+![2023-01-18_20-26-04](https://user-images.githubusercontent.com/100711204/213854880-8e85ceff-9ddf-4f77-9278-072074d0c06a.png)
+
 
 ## 4. Общие рекомендации
 * Создать документацию
