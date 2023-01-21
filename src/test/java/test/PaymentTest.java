@@ -38,7 +38,7 @@ public class PaymentTest {
     @Test
     void test3_shouldFillPaymentFormCard1() {
         var mainPage = new MainPage();
-        mainPage.buyPayment();
+//        mainPage.buyPayment();
         var paymentPage = mainPage.buyPayment();
         var authInfo = DataHelper.getAuthInfoAllValidApproved();
         paymentPage.fillPaymentForm(authInfo);
@@ -49,7 +49,7 @@ public class PaymentTest {
     @Test
     void test4_shouldFillPaymentFormCard2() {
         var mainPage = new MainPage();
-        mainPage.buyPayment();
+//        mainPage.buyPayment();
         var paymentPage = mainPage.buyPayment();
         var authInfo = DataHelper.getAuthInfoAllValidDeclined();
         paymentPage.fillPaymentForm(authInfo);
@@ -60,7 +60,7 @@ public class PaymentTest {
     @Test
     void test5_shouldNotFillPaymentForm() {
         var mainPage = new MainPage();
-        mainPage.buyPayment();
+//        mainPage.buyPayment();
         var paymentPage = mainPage.buyPayment();
         var authInfo = DataHelper.getAuthInfoNoData();
         paymentPage.fillPaymentForm(authInfo);
@@ -173,7 +173,7 @@ public class PaymentTest {
     @Test
     void test13_shouldFillPaymentFormPreviousMonthCurrentYear() {
         var mainPage = new MainPage();
-        mainPage.buyPayment();
+//        mainPage.buyPayment();
         var paymentPage = mainPage.buyPayment();
         var authInfo = DataHelper.getAuthInfoMonthYear();
         paymentPage.fillPaymentForm(authInfo);
